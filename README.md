@@ -82,7 +82,7 @@ Ce n’est **plus le cas**.
 ---
 
 ## 📁 Structure du projet
-
+```
 lib/
 ├── controllers/              # Logique de jeu
 │    └── game_controller.dart
@@ -118,7 +118,7 @@ lib/
 │    └── card_widget.dart
 │
 └── main.dart                 # Point d'entrée de l'application
-
+```
 
 ---
 
