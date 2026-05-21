@@ -12,7 +12,7 @@ A la base un jeu de carte sur table créer lors du projet English Game
 
 Chaque carte représente une étape du design (Quick Sketch, Page Layout, Mockup…), accompagnée de **Power‑ups** et d’un **Joker** qui peuvent renverser le cours de la partie.
 
----
+--- 
 
 ## 📚 Table des matières
 
