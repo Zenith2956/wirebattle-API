@@ -51,6 +51,33 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
     setState(() => isReady = true);
   }
 
+  // ------------------------------------------------------------
+  // CONFIRMATION POWER-UP
+  // ------------------------------------------------------------
+  Future<bool> confirmPowerUp(CardModel pu) async {
+    return await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.black87,
+        title: Text(pu.title, style: const TextStyle(color: Colors.white)),
+        content: Text(pu.texte, style: const TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Non", style: TextStyle(color: Colors.redAccent)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              "Oui",
+              style: TextStyle(color: Colors.greenAccent),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void showPowerUpAnimation(CardModel pu) {
     setState(() => activePowerUpAnimation = pu);
 
@@ -67,7 +94,6 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
   void playCardP1(int index) {
     if (controller.currentPlayer != 1) return;
 
-    // Power_up4 → jouer 2 cartes
     if (controller.p1ActivePowerUp?.id == "Power_up4") {
       if (!waitingSecondCardP1) {
         setState(() {
@@ -180,6 +206,8 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
       );
     }
 
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
@@ -191,7 +219,6 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
       ),
       body: Stack(
         children: [
-          // --- CONTENU PRINCIPAL ---
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -203,27 +230,7 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _playerZone(
-                  playerName: "JOUEUR 1",
-                  color: Colors.purpleAccent,
-                  hand: controller.p1.hand,
-                  deck: controller.p1Deck,
-                  powerUps: controller.p1PowerUpZone,
-                  onCardTap: playCardP1,
-                  onPowerUpTap: (pu) {
-                    setState(() {
-                      controller.activatePowerUp(1, pu);
-
-                      if (pu.id == "Power_up1") controller.usePowerUp1(1);
-                      if (pu.id == "Power_up2") controller.usePowerUp2(1);
-                    });
-
-                    showPowerUpAnimation(pu);
-                  },
-                ),
-
-                _battleZone(),
-
+                // IA en haut
                 _playerZone(
                   playerName: "IA",
                   color: Colors.amberAccent,
@@ -234,11 +241,41 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
                   onPowerUpTap: (_) {},
                   isAI: true,
                 ),
+
+                _battleZone(),
+
+                // Joueur connecté en bas
+                _playerZone(
+                  playerName: userProvider.currentUser?.username ?? "Joueur 1",
+                  color: Colors.purpleAccent,
+                  hand: controller.p1.hand,
+                  deck: controller.p1Deck,
+                  powerUps: controller.p1PowerUpZone,
+                  onCardTap: playCardP1,
+                  onPowerUpTap: (pu) async {
+                    final use = await confirmPowerUp(pu);
+
+                    if (!use) return;
+
+                    setState(() {
+                      controller.p1ActivePowerUp = pu;
+
+                      if (pu.id == "Power_up1") controller.usePowerUp1(1);
+                      if (pu.id == "Power_up2") controller.usePowerUp2(1);
+                      if (pu.id == "Power_up4") waitingSecondCardP1 = false;
+
+                      controller.p1PowerUpZone.remove(pu); // ✔ ici seulement
+                    });
+
+                    // Animation centrale
+                    showPowerUpAnimation(pu);
+                  },
+                ),
               ],
             ),
           ),
 
-          // --- OVERLAY POWER-UP ---
+          // Animation centrale
           if (activePowerUpAnimation != null)
             Center(
               child: AnimatedOpacity(
@@ -287,7 +324,7 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
   }
 
   // ------------------------------------------------------------
-  // ZONE JOUEUR + PIOCHE + POWERUPS
+  // ZONE JOUEUR
   // ------------------------------------------------------------
   Widget _playerZone({
     required String playerName,
@@ -331,11 +368,11 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: hand.length,
                   itemBuilder: (_, i) {
-                    return GestureDetector(
-                      onTap: isAI ? null : () => onCardTap(i),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: CardWidget(card: hand[i]),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: CardWidget(
+                        card: hand[i],
+                        onTap: isAI ? null : () => onCardTap(i),
                       ),
                     );
                   },
@@ -376,11 +413,13 @@ class _GameBoardScreenState extends State<GameBoardScreen> {
               scrollDirection: Axis.horizontal,
               itemCount: powerUps.length,
               itemBuilder: (_, i) {
-                return GestureDetector(
-                  onTap: isAI ? null : () => onPowerUpTap(powerUps[i]),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: CardWidget(card: powerUps[i], width: 60, height: 60),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: CardWidget(
+                    card: powerUps[i],
+                    width: 60,
+                    height: 60,
+                    onTap: isAI ? null : () => onPowerUpTap(powerUps[i]),
                   ),
                 );
               },

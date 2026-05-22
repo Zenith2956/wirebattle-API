@@ -16,7 +16,7 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<UserProvider>().user;
+    final user = context.watch<UserProvider>().currentUser;
 
     return Drawer(
       child: Container(

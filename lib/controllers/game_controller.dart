@@ -52,11 +52,9 @@ class GameController {
   // ------------------------------------------------------------
   void activatePowerUp(int player, CardModel pu) {
     if (player == 1) {
-      p1ActivePowerUp = pu;
-      p1PowerUpZone.remove(pu);
+      p1ActivePowerUp = pu.copy();
     } else {
-      p2ActivePowerUp = pu;
-      p2PowerUpZone.remove(pu);
+      p2ActivePowerUp = pu.copy();
     }
   }
 
@@ -180,12 +178,18 @@ class GameController {
     if (p1Second.rank > p2Second.rank) {
       _giveCardsToWinner(p1Deck, [
         ..._collectPlayedCards(),
-        p1Hidden, p2Hidden, p1Second, p2Second
+        p1Hidden,
+        p2Hidden,
+        p1Second,
+        p2Second,
       ]);
     } else if (p2Second.rank > p1Second.rank) {
       _giveCardsToWinner(p2Deck, [
         ..._collectPlayedCards(),
-        p1Hidden, p2Hidden, p1Second, p2Second
+        p1Hidden,
+        p2Hidden,
+        p1Second,
+        p2Second,
       ]);
     } else {
       p1Played = p1Second;
@@ -247,12 +251,11 @@ class GameController {
     while (p2.hand.length < 3 && p2Deck.isNotEmpty) {
       drawCard(p2, p2Deck);
     }
-
   }
 
   bool isGameOver() {
     return (p1.hand.isEmpty && p1Deck.isEmpty) ||
-           (p2.hand.isEmpty && p2Deck.isEmpty);
+        (p2.hand.isEmpty && p2Deck.isEmpty);
   }
 
   String getWinner() {

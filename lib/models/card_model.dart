@@ -35,6 +35,15 @@ class CardModel {
     required this.rank,
   });
 
+  CardModel copy() {
+    return CardModel(
+      id: id,
+      title: title,
+      texte: texte,
+      rank: rank,
+      assetPath: assetPath,
+    );
+  }
   // 2. La factory qui utilise la map
   factory CardModel.fromApi(String id, Map<String, dynamic> json) {
     return CardModel(
@@ -46,3 +55,4 @@ class CardModel {
     );
   }
 }
+

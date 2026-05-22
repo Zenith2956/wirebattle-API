@@ -5,7 +5,7 @@ import '../repositories/database_provider.dart';
 class UserProvider extends ChangeNotifier {
   User? _user;
 
-  User? get user => _user;
+  User? get currentUser => _user;
 
   void login(User user) {
     _user = user;
@@ -17,16 +17,12 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ------------------------------------------------------------
-  // AJOUTER DU SCORE
-  // ------------------------------------------------------------
   Future<void> addScore(int amount) async {
     if (_user == null) return;
 
     _user!.score += amount;
     notifyListeners();
 
-    // 🔥 Sauvegarde en base
     await DatabaseProvider().updateScore(_user!.id!, _user!.score);
   }
 }
