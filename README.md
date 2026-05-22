@@ -143,6 +143,7 @@ cd WireBattle
 flutter pub get
 flutter run
 
+---
 
 ## 👤 Auteur
 
