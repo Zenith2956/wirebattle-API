@@ -142,7 +142,7 @@ git clone https://github.com/Zenith2956/WireBattle.git
 cd WireBattle
 flutter pub get
 flutter run
-
+```
 ---
 
 ## 👤 Auteur
