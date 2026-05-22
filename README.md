@@ -125,27 +125,30 @@ lib/
 ## 🖼️ Captures d’écran
 
 ### 🏠 Écran d’accueil
-![alt text](accueil.png)
+![accueil.png](assets/accueil.png)
 
 ### 🎴 Vue des cartes
-![alt text](assets/cards.png)
+![cards.png](assets/cards.png)
 
 ### ⚔️ Plateau de jeu
-![alt text](assets/board.png)
+![board.png](assets/board.png)
 
 ---
 
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/tonpseudo/WireBattle.git
+git clone https://github.com/Zenith2956/WireBattle.git
 cd WireBattle
 flutter pub get
 flutter run
-
+```
+---
 
 ## 👤 Auteur
 
 **Arthur Callens**  
 Développeur du projet WireBattle  
-Rennes, France  
+Rennes, France 
+
+--- 
