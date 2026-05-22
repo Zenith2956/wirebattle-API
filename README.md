@@ -125,13 +125,13 @@ lib/
 ## 🖼️ Captures d’écran
 
 ### 🏠 Écran d’accueil
-![alt text](accueil.png)
+![accueil.png](assets/accueil.png)
 
 ### 🎴 Vue des cartes
-![alt text](assets/cards.png)
+![cards.png](assets/cards.png)
 
 ### ⚔️ Plateau de jeu
-![alt text](assets/board.png)
+![board.png](assets/board.png)
 
 ---
 
