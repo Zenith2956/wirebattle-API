@@ -149,4 +149,6 @@ flutter run
 
 **Arthur Callens**  
 Développeur du projet WireBattle  
-Rennes, France  
+Rennes, France 
+
+--- 
