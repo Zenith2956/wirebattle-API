@@ -138,7 +138,7 @@ lib/
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/tonpseudo/WireBattle.git
+git clone https://github.com/Zenith2956/WireBattle.git
 cd WireBattle
 flutter pub get
 flutter run
